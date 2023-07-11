@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
 
 @Component({
@@ -6,10 +6,15 @@ import { DataService } from './data.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'app';
 
   constructor(private dataSer: DataService) { }
+
+  ngOnInit(): void {
+    this.getApi()
+    this.getPokemon()
+  }
 
   num: any;
   output: any = '';
@@ -42,7 +47,7 @@ export class AppComponent {
         this.data.push(Object.values(res)[index])
       }
       this.convertData(this.data)
-      console.log(this.data)
+      // console.log(this.data)
     })
   }
 
@@ -57,30 +62,20 @@ export class AppComponent {
         'body': _getData[index]['body'],
       })
       this.dataSorted = _data
-      console.log('data here', index, '= ', this.dataSorted)
+      // console.log('data here', index, '= ', this.dataSorted)
     }
   }
 
   dataPoke: any[] = [];
   getPokemon() {
       this.dataSer.getPokemonApi().subscribe(res => {
-      console.log(res)
-      this.dataPoke = Object.values(res)[5];
-      console.log(this.dataPoke)
+        console.log("res here", res)
+        // for (let index = 0; index < 1; index++) {
+          // this.dataPoke.push(Object.values(res))
+        // }
+        this.dataPoke.push(res)
+        console.log("res here2", this.dataPoke)
+        // this.convertPokeData(this.dataPoke)
     })
   }
-
-  // dataPokeSorted: any[] = [];
-  // convertPokeData(_getData: any) {
-  //   let _data = [];
-  //   for (let index = 0; index < _getData.length; index++) {
-  //     _data.push({
-  //       'name': _getData[index]['name'],
-  //       'ability': _getData[index]['ability'],
-  //     })
-  //     this.dataPokeSorted = _data
-  //     console.log(this.dataPokeSorted)
-  //   }
-  // }
-
 }
