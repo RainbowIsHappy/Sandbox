@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.getApi()
     this.getPokemon()
+    this.getPokemon2()
   }
 
   num: any;
@@ -69,13 +70,26 @@ export class AppComponent implements OnInit {
   dataPoke: any[] = [];
   getPokemon() {
       this.dataSer.getPokemonApi().subscribe(res => {
-        console.log("res here", res)
+        // console.log("res here", res)
         // for (let index = 0; index < 1; index++) {
           // this.dataPoke.push(Object.values(res))
         // }
         this.dataPoke.push(res)
-        console.log("res here2", this.dataPoke)
+        // console.log("res here2", this.dataPoke)
         // this.convertPokeData(this.dataPoke)
+    })
+  }
+
+  dataPoke2: any[] = [];
+  getPokemon2() {
+    this.dataSer.getPokemonApi2().subscribe(data => {
+      console.log("res hereeeeeee", data)
+      // for (let index = 0; index < 1; index++) {
+      // this.dataPoke.push(Object.values(res))
+      // }
+      this.dataPoke2 = data
+      console.log("res here2", this.dataPoke2)
+      // this.convertPokeData(this.dataPoke)
     })
   }
 }
