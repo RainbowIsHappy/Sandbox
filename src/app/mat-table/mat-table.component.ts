@@ -1,5 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+
+export interface PeriodicElement {
+  entry_number: number;
+  name: string;
+  url: string;
+}
+
+const matTableData : PeriodicElement[] = []
 
 @Component({
   selector: 'app-mat-table',
@@ -7,79 +17,31 @@ import { DataService } from '../data.service';
   styleUrls: ['./mat-table.component.scss']
 })
 export class MatTableComponent implements OnInit {
-  constructor(private dataSer: DataService) { }
+  constructor(private dataSer: DataService) {
+    this.dataSrc = new MatTableDataSource<PeriodicElement>(matTableData);
+  }
 
   ngOnInit(): void {
-    this.getApi()
-    this.getPokemon()
     this.getPokemon2()
   }
 
-  num: any;
-  output: any = '';
-
-  loop1(num: any) {
-
-    for (let index = 1; index <= num; index++) {
-      console.log('*'.repeat(index))
-      this.output += '*'.repeat(index) + '<br>';
-    }
-    for (let index = num - 1; index >= 1; index--) {
-      console.log('*'.repeat(index))
-      this.output += '*'.repeat(index) + '<br>';
-    }
-
-    for (let index = num; index >= 1; index--) {
-      console.log('*'.repeat(index))
-      this.output += '*'.repeat(index) + '<br>';
-    }
-    for (let index = 2; index <= num; index++) {
-      console.log('*'.repeat(index))
-      this.output += '*'.repeat(index) + '<br>';
-    }
+  ngAfterViewInit() {
+    this.dataSrc.paginator = this.paginator1;
   }
 
-  data: any[] = [];
-  getApi() {
-    this.dataSer.getData().subscribe(res => {
-      for (let index = 0; index < Object.values(res).length; index++) {
-        this.data.push(Object.values(res)[index])
-      }
-      this.convertData(this.data)
-      // console.log(this.data)
-    })
-  }
-
-  dataSorted: any[] = [];
-  convertData(_getData: any) {
-    let _data = [];
-    for (let index = 0; index < _getData.length; index++) {
-      _data.push({
-        'userid': _getData[index]['userId'],
-        'id': _getData[index]['id'],
-        'title': _getData[index]['title'],
-        'body': _getData[index]['body'],
-      })
-      this.dataSorted = _data
-      // console.log('data here', index, '= ', this.dataSorted)
-    }
-  }
-
-  dataPoke: any[] = [];
-  getPokemon() {
-    this.dataSer.getPokemonApi().subscribe(res => {
-      this.dataPoke.push(res)
-    })
-  }
+  dataSrc = new MatTableDataSource<PeriodicElement>([]);
+  displayColumns: any[] = ['entry_number', 'name', 'url']
+  @ViewChild('paginator1', { static: true }) paginator1: MatPaginator | any;
 
   dataPoke2: any[] = [];
   getPokemon2() {
     this.dataSer.getPokemonApi2().subscribe(data => {
       console.log("res hereeeeeee", data)
 
-      this.dataPoke2 = data
-      console.log("res here2", this.dataPoke2)
-
+      this.dataSrc.data = data
+      console.log("res here2", this.dataSrc.data)
     })
   }
+
 }
+

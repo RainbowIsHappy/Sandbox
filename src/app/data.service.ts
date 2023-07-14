@@ -39,7 +39,7 @@ export class DataService implements OnInit {
     let data = []
     for (let index = 0; index < array.length; index++) {
       let _getData = {
-        "_id": array[index]['entry_number'],
+        "entry_number": array[index]['entry_number'],
         "name": array[index]['pokemon_species']['name'],
         "url": 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + array[index]['entry_number'] + '.png',
       }
